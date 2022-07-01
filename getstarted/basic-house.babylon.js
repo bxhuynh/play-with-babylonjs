@@ -35,8 +35,8 @@ const createScene = () => {
     new BABYLON.Vector3(1, 1, 0)
   );
 
-  buildDwellings();
-
+  // buildDwellings();
+  BABYLON.SceneLoader.ImportMeshAsync('', '', 'village.glb');
   return scene;
 };
 
