@@ -20,6 +20,8 @@
     <script src="https://preview.babylonjs.com/serializers/babylonjs.serializers.min.js"></script>
     <script src="https://preview.babylonjs.com/gui/babylon.gui.min.js"></script>
     <script src="https://preview.babylonjs.com/inspector/babylon.inspector.bundle.js"></script>
+    <script src="https://preview.babylonjs.com/serializers/babylonjs.glTF2Serializer.js"></script>
+    <script src="babylon.glTFFileLoader.js"></script>
 
     <style>
       html,
@@ -36,10 +38,25 @@
         height: 100%;
         touch-action: none;
       }
+
+      button {
+        z-index: 1000;
+        position: absolute;
+        top: 16px;
+        left: 16px;
+      }
     </style>
   </head>
   <body>
     <canvas id="renderCanvas"></canvas>
+    <button onclick="exportVillage()">Export</button>
     <script src="basic-house.babylon.js"></script>
+    <script>
+      function exportVillage() {
+        BABYLON.GLTF2Export.GLBAsync(scene, 'village').then((glb) => {
+          glb.downloadFiles();
+        });
+      }
+    </script>
   </body>
 </html>
