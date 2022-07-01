@@ -45,7 +45,7 @@
   <body>
     <canvas id="renderCanvas"></canvas>
     <!-- <button onclick="exportModel()">Export</button> -->
-    <script src="collisions.js"></script>
+    <script src="better-env.js"></script>
     <script>
       function exportModel() {
         BABYLON.GLTF2Export.GLBAsync(scene, 'car').then((glb) => {

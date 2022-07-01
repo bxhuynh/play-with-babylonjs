@@ -35,13 +35,13 @@ const createScene = () => {
     new BABYLON.Vector3(1, 1, 0)
   );
 
-  // buildDwellings();
-  BABYLON.SceneLoader.ImportMeshAsync('', '', 'village.glb');
+  buildDwellings();
+  // BABYLON.SceneLoader.ImportMeshAsync('', '', 'village.glb');
   return scene;
 };
 
 const buildDwellings = () => {
-  const ground = buildGround();
+  // const ground = buildGround();
 
   const detached_house = buildHouse(1);
   detached_house.rotation.y = -Math.PI / 16;
