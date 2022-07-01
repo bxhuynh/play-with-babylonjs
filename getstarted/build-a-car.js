@@ -38,16 +38,6 @@ const createScene = () => {
   const car = buildCar();
   car.rotation.x = -Math.PI / 2;
 
-  // const wheelRB = scene.getMeshByName('wheelRB');
-  // const wheelRF = scene.getMeshByName('wheelRF');
-  // const wheelLB = scene.getMeshByName('wheelLB');
-  // const wheelLF = scene.getMeshByName('wheelLF');
-  // console.log(wheelRB.animations);
-  // scene.beginAnimation(wheelRB, 0, 30, true);
-  // scene.beginAnimation(wheelRF, 0, 30, true);
-  // scene.beginAnimation(wheelLB, 0, 30, true);
-  // scene.beginAnimation(wheelLF, 0, 30, true);
-
   return scene;
 };
 

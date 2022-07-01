@@ -21,24 +21,37 @@ var createDefaultEngine = function () {
 const createScene = () => {
   const scene = new BABYLON.Scene(engine);
 
-  /**** Set camera and light *****/
   const camera = new BABYLON.ArcRotateCamera(
     'camera',
-    -Math.PI / 2,
-    Math.PI / 2.5,
-    10,
+    -Math.PI / 2.2,
+    Math.PI / 2.2,
+    15,
     new BABYLON.Vector3(0, 0, 0)
   );
-  camera.attachControl(canvas, true);
-
   camera.attachControl(canvas, true);
   const light = new BABYLON.HemisphericLight(
     'light',
     new BABYLON.Vector3(1, 1, 0)
   );
-  BABYLON.SceneLoader.ImportMeshAsync('', '', 'village.glb');
+
+  const wireMat = new BABYLON.StandardMaterial('wireMat');
+  wireMat.alpha = 0;
+
+  const hitBox = BABYLON.MeshBuilder.CreateBox('carbox', {
+    width: 0.5,
+    height: 0.6,
+    depth: 4.5,
+  });
+  hitBox.material = wireMat;
+  hitBox.position.x = 3.1;
+  hitBox.position.y = 0.3;
+  hitBox.position.z = -5;
+
+  let carReady = false;
+
   BABYLON.SceneLoader.ImportMeshAsync('', '', 'car.glb').then(() => {
     const car = scene.getMeshByName('car');
+    carReady = true;
     car.rotation = new BABYLON.Vector3(Math.PI / 2, 0, -Math.PI / 2);
     car.position.y = 0.16;
     car.position.x = -3;
@@ -86,6 +99,70 @@ const createScene = () => {
     scene.beginAnimation(wheelRF, 0, 30, true);
     scene.beginAnimation(wheelLB, 0, 30, true);
     scene.beginAnimation(wheelLF, 0, 30, true);
+  });
+
+  BABYLON.SceneLoader.ImportMeshAsync('', '', 'village.glb');
+
+  const walk = function (turn, dist) {
+    this.turn = turn;
+    this.dist = dist;
+  };
+
+  const track = [];
+  track.push(new walk(180, 2.5));
+  track.push(new walk(0, 5));
+
+  // Dude
+  BABYLON.SceneLoader.ImportMeshAsync(
+    'him',
+    './scenes/',
+    'Dude.babylon',
+    scene
+  ).then((result) => {
+    var dude = result.meshes[0];
+    dude.scaling = new BABYLON.Vector3(0.008, 0.008, 0.008);
+
+    dude.position = new BABYLON.Vector3(1.5, 0, -6.9);
+    dude.rotate(
+      BABYLON.Axis.Y,
+      BABYLON.Tools.ToRadians(-90),
+      BABYLON.Space.LOCAL
+    );
+    const startRotation = dude.rotationQuaternion.clone();
+
+    scene.beginAnimation(result.skeletons[0], 0, 100, true, 1.0);
+
+    let distance = 0;
+    let step = 0.015;
+    let p = 0;
+
+    scene.onBeforeRenderObservable.add(() => {
+      if (carReady) {
+        if (
+          !dude.getChildren()[1].intersectsMesh(hitBox) &&
+          scene.getMeshByName('car').intersectsMesh(hitBox)
+        ) {
+          return;
+        }
+      }
+      dude.movePOV(0, 0, step);
+      distance += step;
+
+      if (distance > track[p].dist) {
+        dude.rotate(
+          BABYLON.Axis.Y,
+          BABYLON.Tools.ToRadians(track[p].turn),
+          BABYLON.Space.LOCAL
+        );
+        p += 1;
+        p %= track.length;
+        if (p === 0) {
+          distance = 0;
+          dude.position = new BABYLON.Vector3(1.5, 0, -6.9);
+          dude.rotationQuaternion = startRotation.clone();
+        }
+      }
+    });
   });
 
   return scene;
