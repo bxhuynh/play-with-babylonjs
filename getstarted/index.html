@@ -21,6 +21,9 @@
     <script src="https://preview.babylonjs.com/gui/babylon.gui.min.js"></script>
     <script src="https://preview.babylonjs.com/inspector/babylon.inspector.bundle.js"></script>
     <script src="https://preview.babylonjs.com/serializers/babylonjs.serializers.min.js"></script>
+    <script>
+      https://cdn.babylonjs.com/gui/babylon.gui.min.js
+    </script>
 
     <style>
       html,
@@ -45,7 +48,7 @@
   <body>
     <canvas id="renderCanvas"></canvas>
     <!-- <button onclick="exportModel()">Export</button> -->
-    <script src="build-fountain.js"></script>
+    <script src="follow-cam.js"></script>
     <script>
       function exportModel() {
         BABYLON.GLTF2Export.GLBAsync(scene, 'car').then((glb) => {
